@@ -1,0 +1,30 @@
+Key: 13
+Testing
+Cipher text:  'gur jbeq vf guvf'
+Cracked text: 'the word is this'
+with cracked key: 13
+Key: 13
+Testing
+Cipher text:  'gur dhvpx oebja sbk whzc bire gur ynml qbt'
+Cracked text: 'the quick brown fox jump over the lazy dog'
+with cracked key: 13
+Key: 13
+Testing
+Cipher text:  'gur yvggyr gbja snqr njnl vagb pbhagel ba bar fvqr pybfr gb gur ragenaprjnl bs n terng cnex'
+Cracked text: 'the little town fade away into country on one side close to the entranceway of a great park'
+with cracked key: 13
+Key: 19
+Testing
+Cipher text:  'aol xbpjr iyvdu mve qbtw vcly aol shgf kvn'
+Cracked text: 'the quick brown fox jump over the lazy dog'
+with cracked key: 19
+Key: 6
+Testing
+Cipher text:  'yllihyiom wixy cm nby miolwy iz uff ypcf'
+Cracked text: 'erroneous code is the source of all evil'
+with cracked key: 6
+Key: 9
+Testing
+Cipher text:  'sv sfcu reu xf nyviv efsfup yrj xfev svwfiv'
+Cracked text: 'be bold and go where nobody has gone before'
+with cracked key: 9

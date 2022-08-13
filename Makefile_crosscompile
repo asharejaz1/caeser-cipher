@@ -1,0 +1,76 @@
+# Time-stamp: <Tue Jun 01 2021 22:50:46 hwloidl>
+
+# THE FIRST PART of this file, until MAIN, is only needed for cross-compilation
+
+# If AUTOMATICALLY picking paths (below) doesn't work, comment out the appropriate line here:
+# Cross-compiling on a Linux machine (tested with Ubuntu 20.04)
+#CROSS=arm-linux-gnueabihf-
+#EXEC=./
+# Cross-compiling on a Linux machine (CentOS/Fedora)
+#CROSS=/home/hwloidl/opt/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-
+#EXEC=qemu-arm -L /home/hwloidl/opt/usr/arm-linux-gnueabihf ./
+# Compiling directly on RPi (native)
+#CROSS=
+#EXEC=./
+
+# This SHOULD AUTOMATICALLY pick the prefix for CROSS compilation end EXECution depending on which system you are running on:
+OS := $(shell ./which_os.sh)
+
+ifeq ($(OS),Ubuntu)
+# Cross-compiling on a Linux machine (tested with Ubuntu 20.04)
+CROSS=arm-linux-gnueabihf-
+# Note: Ubuntu 20.04 automatically picks up qemu-arm when spotting an ARM binary, but needs QEMU_LD_PREFIX
+# The line below works even without binutils magic, calling qemu-arm explicitly and using a flag for library path
+EXEC=qemu-arm -L /usr/arm-linux-gnueabihf ./
+# or set env variable: QEMU_LD_PREFIX=/usr/arm-linux-gnueabihf
+else ifeq ($(OS),CentOS)
+# Cross-compiling on a Linux machine (CentOS/Fedora)
+CROSS=/home/hwloidl/opt/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-
+# QEMU_LIB=-L /home/hwloidl/opt/usr/arm-linux-gnueabihf
+# Running the binary using qemu emulator (for running RPi code on an Intel Linux machine)
+EXEC=qemu-arm -L /home/hwloidl/opt/usr/arm-linux-gnueabihf ./
+# NB: could also use QEMU_LD_PREFIX env variable to point to above path
+else ifeq ($(OS),Raspbian)
+# Compiling directly on RPi (native)
+CROSS=
+# Running it directly on RPi
+EXEC=./
+else
+# Compiling directly on whatever device we are running on
+CROSS=
+EXEC=./
+endif
+
+# -----------------------------------------------------------------------------
+# MAIN part of the makefile
+
+# C compiler (either native or as cross compiler)
+CC=gcc
+AS=as
+
+PRG=crack_rot
+FILEIN=filein.txt
+
+all: $(PRG)
+
+os:
+	@echo "You are running on this operating system: $(OS)"
+
+$(PRG): $(PRG).c
+	$(CROSS)$(CC) -o $@ $^
+
+# $(PRG)_asm: $(PRG).c rotN.s showIntCConv.s
+# 	$(CROSS)$(CC) -c -DASM -o $(PRG)_asm.o $(PRG).c
+# 	$(CROSS)$(AS) -o showIntCConv.o showIntCConv.s
+# 	$(CROSS)$(AS) -o rotN.o rotN.s
+# 	$(CROSS)$(CC) -o $@ $(PRG)_asm.o rotN.o showIntCConv.o
+
+run:
+	$(EXEC)$(PRG)
+
+test:
+	$(EXEC)$(PRG) -f $(FILEIN)
+
+clean:
+	-rm $(PRG) *.o
+
